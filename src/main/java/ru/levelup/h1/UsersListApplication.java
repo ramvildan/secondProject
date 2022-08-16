@@ -1,27 +1,29 @@
 package ru.levelup.h1;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UsersListApplication {
+
+    public static Gson gson = new GsonBuilder().create();
+    public static String userToJson(User user) {
+        return gson.toJson(user);
+    }
     public static void main(String[] args) throws IOException {
         File file = new File("LIST.CSV");
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            List<String> lines = new ArrayList<>();
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] valuesOfUsers = line.split(",");
-                for (int i = 0; i < valuesOfUsers.length; i++) {
-//                    System.out.print(valuesOfUsers[i] + " ");
-                }
+                String[] values = line.split(",");
+                User user = new User(values[0],values[1],Integer.parseInt(values[2]),Integer.parseInt(values[3]));
+                String json = UsersListApplication.userToJson(user);
+                System.out.println(json);
             }
-
-            // в цикле сделать split
-
         } catch (IOException exc) {
             throw new RuntimeException(exc);
         }
